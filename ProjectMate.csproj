@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="ProjectMate/**/*.cs" />
+    <Content Remove="ProjectMate/**" />
+    <EmbeddedResource Remove="ProjectMate/**" />
+    <None Remove="ProjectMate/**" />
+  </ItemGroup>
+
+</Project>
