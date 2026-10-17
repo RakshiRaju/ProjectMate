@@ -1,281 +1,79 @@
 ﻿@page
 @model IndexModel
-
 @{
-    ViewData["Title"] = "ProjectMate";
+    ViewData["Title"] = "Home";
 }
 
-<style>
-    body {
-        background: #f4f7fb;
-        font-family: Arial, sans-serif;
-    }
-
-    .hero {
-        background: linear-gradient(135deg, #182848, #4b6cb7);
-        color: white;
-        padding: 65px 25px;
-        border-radius: 18px;
-        text-align: center;
-        margin-bottom: 30px;
-    }
-
-    .hero h1 {
-        font-size: 42px;
-        font-weight: bold;
-    }
-
-    .hero p {
-        font-size: 18px;
-        margin: 20px 0;
-    }
-
-    .search-box {
-        max-width: 550px;
-        margin: 25px auto 0;
-    }
-
-    .search-box input {
-        width: 100%;
-        padding: 14px;
-        border: none;
-        border-radius: 8px;
-        box-sizing: border-box;
-    }
-
-    .section-title {
-        text-align: center;
-        margin: 35px 0 25px;
-        color: #182848;
-    }
-
-    .cards {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 20px;
-    }
-
-    .card {
-        background: white;
-        padding: 25px;
-        border-radius: 14px;
-        box-shadow: 0 4px 15px #00000010;
-        transition: transform 0.2s;
-    }
-
-    .card:hover {
-        transform: translateY(-5px);
-    }
-
-    .icon {
-        font-size: 35px;
-    }
-
-    .card h3 {
-        color: #294778;
-    }
-
-    .card button {
-        background: #3457a4;
-        color: white;
-        border: none;
-        padding: 10px 15px;
-        border-radius: 7px;
-        cursor: pointer;
-    }
-
-    .card button:hover {
-        background: #182848;
-    }
-
-    .result {
-        background: #e6f0ff;
-        padding: 15px;
-        border-radius: 8px;
-        margin-top: 15px;
-        display: none;
-    }
-
-    .footer-box {
-        text-align: center;
-        padding: 30px;
-        color: #555;
-    }
-
-    #noResults {
-        display: none;
-        text-align: center;
-        padding: 20px;
-    }
-</style>
-
-<div class="hero">
-    <h1>Welcome to ProjectMate 🚀</h1>
-
-    <p>
-        Your smart companion for mini projects,
-        major projects and technical learning.
+<section class="mast">
+    <p class="kicker">A desk for student projects</p>
+    <h1>Pick a project you can finish.</h1>
+    <p class="lede">
+        Mini projects, major projects, the errors that usually stop them,
+        and a short order for learning the skills they need.
     </p>
-
-    <div class="search-box">
-        <input id="searchInput"
-               type="text"
-               placeholder="Search project ideas or technologies..."
-               oninput="searchProjects()" />
-    </div>
-</div>
-
-<h2 class="section-title">Explore Your Project Journey</h2>
-
-<div class="cards">
-
-    <div class="card project-card">
-        <div class="icon">💡</div>
-        <h3>Project Ideas</h3>
-
-        <p>
-            Discover useful project ideas for
-            students and beginners.
-        </p>
-
-        <button onclick="showInfo('ideas')">
-            Explore Ideas
-        </button>
-
-        <div id="ideas" class="result">
-            <strong>Try these projects:</strong>
-            <ul>
-                <li>Student Task Manager</li>
-                <li>Smart Expense Tracker</li>
-                <li>Online Quiz Application</li>
-                <li>Library Management System</li>
-            </ul>
+    <form class="finder" method="get" asp-page="/Ideas/Index">
+        <label for="home-search">Search project ideas or technologies</label>
+        <div class="finder-row">
+            <input id="home-search" name="q" type="search" placeholder="Quiz, SQL, booking…" />
+            <button type="submit">Search ideas</button>
         </div>
-    </div>
+    </form>
+</section>
 
-    <div class="card project-card">
-        <div class="icon">🛠️</div>
-        <h3>Problem Solver</h3>
+<div class="home-grid">
+    <section aria-labelledby="journeys-heading">
+        <h2 id="journeys-heading" class="section-label">Start here</h2>
+        <ol class="journeys">
+            <li>
+                <a asp-page="/Ideas/Index">
+                    <span class="journey-index">01</span>
+                    <span>
+                        <strong>Project ideas</strong>
+                        <span>@Model.IdeaCount projects, marked mini or major, with the steps to build each one.</span>
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a asp-page="/Problems/Index">
+                    <span class="journey-index">02</span>
+                    <span>
+                        <strong>Problem solver</strong>
+                        <span>@Model.ProblemCount common failures, each with a symptom, a cause, and a fix.</span>
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a asp-page="/Technologies/Index">
+                    <span class="journey-index">03</span>
+                    <span>
+                        <strong>Technology guide</strong>
+                        <span>@Model.TechnologyCount stacks, and the kind of project each one is actually for.</span>
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a asp-page="/Learning/Index">
+                    <span class="journey-index">04</span>
+                    <span>
+                        <strong>Learning corner</strong>
+                        <span>@Model.LessonCount steps, from fundamentals to saving data, tied to a project you can practice on.</span>
+                    </span>
+                </a>
+            </li>
+        </ol>
+    </section>
 
-        <p>
-            Find solutions to common project
-            development problems.
-        </p>
-
-        <button onclick="showInfo('problems')">
-            Find Solutions
-        </button>
-
-        <div id="problems" class="result">
-            <strong>Common problems:</strong>
-            <ul>
-                <li>
-                    Build error: Check the error message
-                    and missing dependencies.
-                </li>
-                <li>
-                    Database error: Verify the connection
-                    string and database availability.
-                </li>
-                <li>
-                    Page not loading: Check the URL
-                    and application logs.
-                </li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="card project-card">
-        <div class="icon">💻</div>
-        <h3>Technology Guide</h3>
-
-        <p>
-            Understand which technologies are suitable
-            for different projects.
-        </p>
-
-        <button onclick="showInfo('tech')">
-            View Technologies
-        </button>
-
-        <div id="tech" class="result">
-            <strong>Technology suggestions:</strong>
-            <ul>
-                <li>C# and .NET: Web applications</li>
-                <li>Python: Automation and data analysis</li>
-                <li>HTML and CSS: Website interfaces</li>
-                <li>SQL: Structured data storage</li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="card project-card">
-        <div class="icon">📚</div>
-        <h3>Learning Corner</h3>
-
-        <p>
-            Learn the basics and build your
-            programming confidence.
-        </p>
-
-        <button onclick="showInfo('learning')">
-            Start Learning
-        </button>
-
-        <div id="learning" class="result">
-            <strong>Recommended learning path:</strong>
-            <ol>
-                <li>Programming fundamentals</li>
-                <li>HTML and CSS</li>
-                <li>C# fundamentals</li>
-                <li>ASP.NET Core basics</li>
-            </ol>
-        </div>
-    </div>
-
-</div>
-
-<p id="noResults">
-    No matching cards found. Try another search.
-</p>
-
-<div class="footer-box">
-    <h3>Build. Learn. Solve. Grow.</h3>
-    <p>ProjectMate — Helping students build with confidence.</p>
-</div>
-
-<script>
-    function showInfo(id) {
-        const result = document.getElementById(id);
-
-        if (result.style.display === "block") {
-            result.style.display = "none";
-        } else {
-            result.style.display = "block";
-        }
-    }
-
-    function searchProjects() {
-        const input = document
-            .getElementById("searchInput")
-            .value.toLowerCase();
-
-        const cards = document.querySelectorAll(".project-card");
-        let visibleCount = 0;
-
-        cards.forEach(function(card) {
-            const matches = card.innerText
-                .toLowerCase()
-                .includes(input);
-
-            card.style.display = matches ? "" : "none";
-
-            if (matches) {
-                visibleCount++;
+    <aside class="featured" aria-labelledby="featured-heading">
+        <p class="kicker">Open one</p>
+        <h2 id="featured-heading">@Model.Featured.Title</h2>
+        <p>@Model.Featured.Summary</p>
+        <p class="meta">@Model.Featured.Kind · @Model.Featured.Difficulty</p>
+        <ol class="steps">
+            @foreach (var step in Model.Featured.Steps.Take(3))
+            {
+                <li>@step</li>
             }
-        });
-
-        document.getElementById("noResults").style.display =
-            visibleCount === 0 ? "block" : "none";
-    }
-</script>
+        </ol>
+        <a class="text-link" asp-page="/Ideas/Detail" asp-route-slug="@Model.Featured.Slug">Read the full project</a>
+    </aside>
+</div>

@@ -1,0 +1,71 @@
+@page "/Ideas/{slug}"
+@model DetailModel
+@{
+    ViewData["Title"] = Model.Idea?.Title ?? "Project not found";
+}
+
+@if (Model.Idea is null)
+{
+    <header class="page-intro">
+        <p class="kicker">Project ideas</p>
+        <h1>That project is not on the desk.</h1>
+        <p><a asp-page="/Ideas/Index">Back to every project.</a></p>
+    </header>
+}
+else
+{
+    <header class="page-intro">
+        <p class="kicker"><a asp-page="/Ideas/Index">Project ideas</a></p>
+        <h1>@Model.Idea.Title</h1>
+        <p class="lede">@Model.Idea.Summary</p>
+        <p class="meta">@Model.Idea.Kind · @Model.Idea.Difficulty</p>
+        <ul class="tags tags-inline">
+            @foreach (var tech in Model.Idea.Technologies)
+            {
+                <li>
+                    <a asp-page="/Ideas/Index" asp-route-tech="@tech.Slug">@tech.Name</a>
+                </li>
+            }
+        </ul>
+    </header>
+
+    <div class="detail-grid">
+        <section>
+            <h2>Build it in this order</h2>
+            <ol class="steps steps-loose">
+                @foreach (var step in Model.Idea.Steps)
+                {
+                    <li>@step</li>
+                }
+            </ol>
+        </section>
+        <section class="learn-block">
+            <h2>What you practice</h2>
+            <ul class="plain-list">
+                @foreach (var item in Model.Idea.YouWillLearn)
+                {
+                    <li>@item</li>
+                }
+            </ul>
+        </section>
+    </div>
+
+    @if (Model.Related.Count > 0)
+    {
+        <section class="related">
+            <h2>Nearby projects</h2>
+            <ul class="catalog">
+                @foreach (var project in Model.Related)
+                {
+                    <li>
+                        <a asp-page="/Ideas/Detail" asp-route-slug="@project.Slug">
+                            <span class="catalog-title">@project.Title</span>
+                            <span class="meta">@project.Kind · @project.Difficulty</span>
+                            <span class="catalog-summary">@project.Summary</span>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </section>
+    }
+}

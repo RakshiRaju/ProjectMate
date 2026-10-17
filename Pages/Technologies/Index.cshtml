@@ -1,0 +1,46 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Technology guide";
+}
+
+<header class="page-intro">
+    <p class="kicker">Technology guide</p>
+    <h1>Pick the stack for the job, not the one you saw last.</h1>
+    <p>A portfolio does not need a database. A booking system does. Use the fit, then open the projects that use that technology.</p>
+</header>
+
+<div class="tech-list">
+    @foreach (var tech in Model.Technologies)
+    {
+        var count = Model.ProjectCounts[tech.Slug];
+        <article>
+            <div>
+                <h2>@tech.Name</h2>
+                <p class="meta">@tech.BestFor</p>
+                <p>@tech.Summary</p>
+                <p>
+                    <a asp-page="/Ideas/Index" asp-route-tech="@tech.Slug">
+                        @count @(count == 1 ? "project" : "projects") using this
+                    </a>
+                </p>
+            </div>
+            <div class="tech-notes">
+                <h3>Use it when</h3>
+                <ul>
+                    @foreach (var fit in tech.Fits)
+                    {
+                        <li>@fit</li>
+                    }
+                </ul>
+                <h3>Leave it when</h3>
+                <ul>
+                    @foreach (var note in tech.WatchOuts)
+                    {
+                        <li>@note</li>
+                    }
+                </ul>
+            </div>
+        </article>
+    }
+</div>

@@ -1,0 +1,52 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Problem solver";
+}
+
+<header class="page-intro">
+    <p class="kicker">Problem solver</p>
+    <h1>When the project stops, start with the symptom.</h1>
+    <p>Match what you see, then read the cause and the fix. These are the failures that show up on student projects, not a list of every error in .NET.</p>
+</header>
+
+<form class="finder" method="get">
+    <label for="problem-search">Search symptoms, causes, or technologies</label>
+    <div class="finder-row">
+        <input id="problem-search" name="q" type="search" value="@Model.Q" placeholder="404, database, form…" />
+        <button type="submit">Search</button>
+    </div>
+</form>
+
+@if (Model.Problems.Count == 0)
+{
+    <p class="empty">
+        No problem matches that.
+        <a asp-page="/Problems/Index">See the full list.</a>
+    </p>
+}
+else
+{
+    <div class="problems">
+        @foreach (var problem in Model.Problems)
+        {
+            <article id="@problem.Slug">
+                <h2>@problem.Title</h2>
+                <dl>
+                    <div>
+                        <dt>Symptom</dt>
+                        <dd>@problem.Symptom</dd>
+                    </div>
+                    <div>
+                        <dt>Cause</dt>
+                        <dd>@problem.Cause</dd>
+                    </div>
+                    <div>
+                        <dt>Fix</dt>
+                        <dd>@problem.Fix</dd>
+                    </div>
+                </dl>
+            </article>
+        }
+    </div>
+}

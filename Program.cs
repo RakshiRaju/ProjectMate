@@ -1,6 +1,8 @@
+using ProjectMate.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Services.AddSingleton<ProjectCatalog>();
 builder.Services.AddRazorPages();
 
 var app = builder.Build();

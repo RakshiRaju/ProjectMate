@@ -1,0 +1,43 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Learning corner";
+}
+
+<header class="page-intro">
+    <p class="kicker">Learning corner</p>
+    <h1>Five steps, then a project that uses them.</h1>
+    <p>Do them in order. Each step names something small to practice and a project on this site where that practice shows up.</p>
+</header>
+
+<ol class="lessons">
+    @foreach (var lesson in Model.Lessons)
+    {
+        <li>
+            <span class="lesson-number">@lesson.Number.ToString("00")</span>
+            <div>
+                <h2>@lesson.Title</h2>
+                <p>@lesson.Summary</p>
+                <h3>Practice</h3>
+                <ul>
+                    @foreach (var item in lesson.Practice)
+                    {
+                        <li>@item</li>
+                    }
+                </ul>
+                <h3>Use it on</h3>
+                <ul class="lesson-projects">
+                    @foreach (var slug in lesson.ProjectSlugs)
+                    {
+                        if (Model.ProjectsBySlug.TryGetValue(slug, out var project))
+                        {
+                            <li>
+                                <a asp-page="/Ideas/Detail" asp-route-slug="@project.Slug">@project.Title</a>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+        </li>
+    }
+</ol>

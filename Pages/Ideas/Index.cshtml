@@ -1,0 +1,84 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Project ideas";
+    string KindClass(string kind) =>
+        string.Equals(Model.Kind, kind, StringComparison.OrdinalIgnoreCase) ? "is-on" : "";
+    string DifficultyClass(string difficulty) =>
+        string.Equals(Model.Difficulty, difficulty, StringComparison.OrdinalIgnoreCase) ? "is-on" : "";
+}
+
+<header class="page-intro">
+    <p class="kicker">Project ideas</p>
+    <h1>Projects with a place to start.</h1>
+    <p>Each one has a size, a difficulty, the technologies it uses, and the steps to build it.</p>
+</header>
+
+<form class="finder" method="get">
+    <label for="idea-search">Search by name, technology, or step</label>
+    <div class="finder-row">
+        <input id="idea-search" name="q" type="search" value="@Model.Q" placeholder="Library, beginner, SQL…" />
+        @if (!string.IsNullOrWhiteSpace(Model.Kind))
+        {
+            <input type="hidden" name="kind" value="@Model.Kind" />
+        }
+        @if (!string.IsNullOrWhiteSpace(Model.Difficulty))
+        {
+            <input type="hidden" name="difficulty" value="@Model.Difficulty" />
+        }
+        @if (!string.IsNullOrWhiteSpace(Model.Tech))
+        {
+            <input type="hidden" name="tech" value="@Model.Tech" />
+        }
+        <button type="submit">Search</button>
+    </div>
+</form>
+
+<div class="filters" role="group" aria-label="Filter projects">
+    <a asp-page="/Ideas/Index"
+       asp-route-q="@Model.Q"
+       class="@(string.IsNullOrWhiteSpace(Model.Kind) && string.IsNullOrWhiteSpace(Model.Difficulty) && string.IsNullOrWhiteSpace(Model.Tech) ? "is-on" : "")">All</a>
+    <a asp-page="/Ideas/Index" asp-route-q="@Model.Q" asp-route-kind="Mini" asp-route-difficulty="@Model.Difficulty" asp-route-tech="@Model.Tech" class="@KindClass("Mini")">Mini</a>
+    <a asp-page="/Ideas/Index" asp-route-q="@Model.Q" asp-route-kind="Major" asp-route-difficulty="@Model.Difficulty" asp-route-tech="@Model.Tech" class="@KindClass("Major")">Major</a>
+    <a asp-page="/Ideas/Index" asp-route-q="@Model.Q" asp-route-kind="@Model.Kind" asp-route-difficulty="Beginner" asp-route-tech="@Model.Tech" class="@DifficultyClass("Beginner")">Beginner</a>
+    <a asp-page="/Ideas/Index" asp-route-q="@Model.Q" asp-route-kind="@Model.Kind" asp-route-difficulty="Intermediate" asp-route-tech="@Model.Tech" class="@DifficultyClass("Intermediate")">Intermediate</a>
+    <a asp-page="/Ideas/Index" asp-route-q="@Model.Q" asp-route-kind="@Model.Kind" asp-route-difficulty="Advanced" asp-route-tech="@Model.Tech" class="@DifficultyClass("Advanced")">Advanced</a>
+</div>
+
+@if (Model.ActiveTechnology is not null)
+{
+    <p class="filter-note">
+        Limited to @Model.ActiveTechnology.Name.
+        <a asp-page="/Ideas/Index" asp-route-q="@Model.Q" asp-route-kind="@Model.Kind" asp-route-difficulty="@Model.Difficulty">Show every technology</a>
+    </p>
+}
+
+@if (Model.Projects.Count == 0)
+{
+    <p class="empty">
+        Nothing matches that search.
+        <a asp-page="/Ideas/Index">Clear it and see every project.</a>
+    </p>
+}
+else
+{
+    <p class="count">@Model.Projects.Count @(Model.Projects.Count == 1 ? "project" : "projects")</p>
+    <ul class="catalog">
+        @foreach (var project in Model.Projects)
+        {
+            <li>
+                <a asp-page="/Ideas/Detail" asp-route-slug="@project.Slug">
+                    <span class="catalog-title">@project.Title</span>
+                    <span class="meta">@project.Kind · @project.Difficulty</span>
+                    <span class="catalog-summary">@project.Summary</span>
+                    <span class="tags">
+                        @foreach (var tech in project.Technologies)
+                        {
+                            <span>@tech.Name</span>
+                        }
+                    </span>
+                </a>
+            </li>
+        }
+    </ul>
+}
